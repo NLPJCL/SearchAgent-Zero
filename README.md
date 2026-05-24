@@ -11,7 +11,7 @@ It provides a reproducible training recipe with multi-turn tool calling, retriev
 - **[2026/05/24] SearchAgent-Zero releases Search-R1 and ASearch recipes.** The Search-R1 recipe improves the average score on the full Search-R1 evaluation suite from `0.325` to `0.407` with Qwen2.5-3B-Instruct. The ASearch recipe scales to long-horizon search: SearchAgent-Zero (Qwen3-8B, 300 steps) reaches `37.95%` Accuracy and `50.87%` Recall on BrowseComp-Plus, achieving SOTA among models below 14B parameters. See `examples/search_agent_rl/`, `verl/experimental/agent_loop/`, and `verl/tools/search_tool.py` for implementation details.
 
 ## Key Features
-
+- **Stable and scalable RL infrastructure**: Built on the latest verl RL infrastructure and GRPO training pipeline, SearchAgent-Zero has been validated on Search-R1-style search agent training and can scale to longer multi-turn search trajectories without the rollout crashes observed in the original framework.
 - **Abnormal trajectory monitoring**: Tracks Search Agent-specific metrics during training, including tool call success rate, average search turns, repeated queries, excessive parallel queries, tool parsing failures, and trajectory truncation.
 - **Abnormal trajectory filtering and credit assignment**: Filters or penalizes low-quality trajectories such as repeated searches, too many parallel queries in one turn, and malformed tool calls. When an abnormal event occurs in only one tool-call turn, only the tokens related to that turn are penalized, reducing unintended punishment of earlier valid search behavior.
 - **Search result summary compression**: Supports self-summary and external-summary to preserve key information across more search turns within a limited context budget.
