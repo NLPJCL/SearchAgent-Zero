@@ -1,12 +1,12 @@
 # SearchAgent-Zero: 基于 verl 的可扩展多轮 Search Agent RL 训练框架
 
-SearchAgent-Zero 是一个面向 Search Agent 的强化学习训练框架，支持从 Search-R1 式短程搜索扩展到 ASearch 式长程多轮搜索。
+SearchAgent-Zero 是一个基于 verl 的 Search Agent 强化学习训练框架，覆盖 Search-R1 式短程问答搜索，也支持 ASearch 式长程多轮搜索。
 
-本项目基于 [verl](https://github.com/verl-project/verl) 构建，目标是提供一套稳定、低成本、可复现、可扩展的 Search Agent RL recipe。它将多轮工具调用、检索服务、异常轨迹处理、summary 压缩与同步/异步 RL 训练整合到同一套训练流程中，便于研究者和工程师复现 Search-R1 类任务，并继续探索更长程的 Agent Search 能力。
+项目提供一套可复现、可扩展的训练 recipe，整合了多轮工具调用、检索服务、异常轨迹处理、summary 压缩，以及同步/异步 RL 训练流程，方便研究者和工程师复现并扩展 Search Agent RL。
 
 ## News
 
-- **[2026/05/24] SearchAgent-Zero 发布 Search-R1 与 ASearch recipe**：Search-R1 recipe 面向 2-3 轮搜索的短程问答训练，在 Qwen2.5-3B-Instruct 设置下将完整 Search-R1 评测集合平均分从 `0.325` 提升到 `0.407`，相对原 Search-R1 提升约 `25.3%`；ASearch recipe 面向 10-20 轮甚至更长轨迹的多轮搜索训练，其中 SearchAgent-Zero (Qwen3-8B, 300 step) 在 BrowseComp-Plus 达到 `37.95%` Accuracy、`50.87%` Recall，在 14B 以下模型中达到 SOTA，并超过 GPT-OSS-20B (`35.1%`) 等更大模型。更多实现细节可参考 `examples/search_agent_rl/`、`verl/experimental/agent_loop/` 与 `verl/tools/search_tool.py`。
+- **[2026/05/24] SearchAgent-Zero 发布 Search-R1 与 ASearch recipes。** Search-R1 recipe 在 Qwen2.5-3B-Instruct 上将完整 Search-R1 评测平均分从 `0.325` 提升到 `0.407`；ASearch recipe 支持长程多轮搜索训练，SearchAgent-Zero (Qwen3-8B, 300 steps) 在 BrowseComp-Plus 达到 `37.95%` Accuracy 和 `50.87%` Recall，在 14B 以下模型中达到 SOTA。实现细节见 `examples/search_agent_rl/`、`verl/experimental/agent_loop/` 和 `verl/tools/search_tool.py`。
 
 ## 主要功能
 
