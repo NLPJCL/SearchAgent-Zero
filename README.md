@@ -2,13 +2,13 @@
 
 [中文文档](README_zh.md)
 
-SearchAgent-Zero is a reinforcement learning framework for Search Agents. It supports short-horizon search in the style of Search-R1 and extends to long-horizon, multi-turn search in the style of ASearch.
+SearchAgent-Zero is a verl-based reinforcement learning framework for training search agents, covering both short-horizon Search-R1-style QA and long-horizon ASearch-style multi-turn search.
 
-Built on [verl](https://github.com/verl-project/verl), this project aims to provide a stable, low-cost, reproducible, and extensible Search Agent RL recipe. It integrates multi-turn tool calling, retrieval services, abnormal trajectory handling, summary compression, and synchronous/asynchronous RL training into one training workflow, making it easier for researchers and engineers to reproduce Search-R1-style tasks and further explore long-horizon Agent Search capabilities.
+It provides a reproducible training recipe with multi-turn tool calling, retrieval services, abnormal trajectory handling, summary compression, and synchronous/asynchronous RL training. The goal is to make Search Agent RL easier to reproduce, scale, and extend.
 
 ## News
 
-- **[2026/05/24] SearchAgent-Zero releases Search-R1 and ASearch recipes**: The Search-R1 recipe targets short-horizon QA training with 2-3 search turns. With Qwen2.5-3B-Instruct, it improves the average score on the full Search-R1 evaluation suite from `0.325` to `0.407`, a relative gain of about `25.3%` over the original Search-R1 result. The ASearch recipe targets long-horizon multi-turn search training with 10-20 turns or longer trajectories. SearchAgent-Zero (Qwen3-8B, 300 step) reaches `37.95%` Accuracy and `50.87%` Recall on BrowseComp-Plus, achieving SOTA among models below 14B parameters and surpassing larger models such as GPT-OSS-20B (`35.1%`). For implementation details, see `examples/search_agent_rl/`, `verl/experimental/agent_loop/`, and `verl/tools/search_tool.py`.
+- **[2026/05/24] SearchAgent-Zero releases Search-R1 and ASearch recipes.** The Search-R1 recipe improves the average score on the full Search-R1 evaluation suite from `0.325` to `0.407` with Qwen2.5-3B-Instruct. The ASearch recipe scales to long-horizon search: SearchAgent-Zero (Qwen3-8B, 300 steps) reaches `37.95%` Accuracy and `50.87%` Recall on BrowseComp-Plus, achieving SOTA among models below 14B parameters. See `examples/search_agent_rl/`, `verl/experimental/agent_loop/`, and `verl/tools/search_tool.py` for implementation details.
 
 ## Key Features
 
