@@ -1,4 +1,4 @@
-# SearchAgent-Zero: A Scalable Multi-Turn Search Agent RL Framework Built on verl
+# SearchAgent-Zero: A Scalable Multi-Turn Search Agent RL Framework
 
 [中文文档](README_zh.md)
 
