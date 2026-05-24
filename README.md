@@ -12,9 +12,6 @@ It provides a reproducible training recipe with multi-turn tool calling, retriev
 
 ## Key Features
 
-- **Native verl AgentLoop multi-turn search rollout**: Uses verl's AgentLoop abstraction to connect search tools, enabling multi-turn search, reading, reasoning, and answer generation during actor rollout.
-- **Reproducible Search-R1 and ASearch recipes**: Provides scripts for reproducing short-horizon Search-R1 training and long-horizon Qwen3-8B ASearch training.
-- **Local dense retriever and custom search services**: Supports a Search-R1-style local E5 + Wikipedia retrieval service by default, while allowing users to replace it with their own retriever or search API.
 - **Abnormal trajectory monitoring**: Tracks Search Agent-specific metrics during training, including tool call success rate, average search turns, repeated queries, excessive parallel queries, tool parsing failures, and trajectory truncation.
 - **Abnormal trajectory filtering and credit assignment**: Filters or penalizes low-quality trajectories such as repeated searches, too many parallel queries in one turn, and malformed tool calls. When an abnormal event occurs in only one tool-call turn, only the tokens related to that turn are penalized, reducing unintended punishment of earlier valid search behavior.
 - **Search result summary compression**: Supports self-summary and external-summary to preserve key information across more search turns within a limited context budget.
