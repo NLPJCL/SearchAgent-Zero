@@ -1,0 +1,41 @@
+# Base Python dependencies for a portable development/training environment.
+#
+# This file intentionally avoids machine-specific runtime packages such as:
+# - CUDA/NVIDIA wheels: nvidia-*, cuda-*, cupy-cuda*
+# - compiled attention/inference kernels: flash-attn, flashinfer-*, xformers, triton
+# - rollout backends tied to a hardware/software stack: vllm, sglang, sgl-kernel
+# - pinned torch/torchaudio/torchvision wheels
+#
+# Install those packages separately for your CUDA/ROCm/NPU driver, PyTorch, vLLM,
+# and SGLang versions. For the common NVIDIA setup, see:
+#   scripts/install_vllm_sglang_mcore.sh
+#
+# Install this project itself with:
+#   uv pip install -e .
+
+accelerate
+codetiming
+datasets
+dill
+hydra-core
+numpy<2.0.0
+pandas
+peft
+pyarrow>=19.0.0
+pybind11
+pylatexenc
+pre-commit
+ray[default]>=2.41.0
+tensordict>=0.8.0,<=0.10.0,!=0.9.0
+torchdata
+transformers
+wandb
+packaging>=20.0
+uvicorn
+fastapi
+tensorboard
+
+# Optional reward/data utilities used by some examples.
+latex2sympy2_extended
+math-verify
+mathruler

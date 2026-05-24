@@ -1,0 +1,2 @@
+- name: tool_agent
+  _target_: verl.experimental.agent_loop.tool_agent_loop_credit_assignment.ToolAgentLoop
