@@ -312,6 +312,10 @@ class ToolAgentLoop(AgentLoopBase):
         user_limit = self._cap_turn_limit(dynamic_limit, self.max_user_turns)
         return assistant_limit, user_limit
 
+    @staticmethod
+    def _mask_previous_response_tokens(agent_data: AgentData, current_turn_start: int) -> None:
+        agent_data.response_mask[:current_turn_start] = [0] * current_turn_start
+
     @rollout_trace_op
     async def run(self, sampling_params: dict[str, Any], **kwargs) -> AgentLoopOutput:
         messages = list(kwargs["raw_prompt"])
@@ -448,6 +452,7 @@ class ToolAgentLoop(AgentLoopBase):
         agent_data.assistant_turns += 1
         agent_data.response_ids = output.token_ids
         agent_data.prompt_ids += agent_data.response_ids
+        current_turn_start = len(agent_data.response_mask)
         agent_data.response_mask += [1] * len(agent_data.response_ids)
         if output.log_probs:
             agent_data.response_logprobs += output.log_probs
@@ -486,20 +491,24 @@ class ToolAgentLoop(AgentLoopBase):
                     query_list = parsed_args.get("query_list")
                     if not query_list or not isinstance(query_list, list):
                         agent_data.abnormal_trajectory_dic['tool_parser_error_count'] += 1
+                        self._mask_previous_response_tokens(agent_data, current_turn_start)
                         return AgentState.TERMINATED
                     else:
                         if self.max_queries_per_tool_call and len(query_list) > self.max_queries_per_tool_call:
                             agent_data.abnormal_trajectory_dic['too_many_tool_call_count'] += 1
+                            self._mask_previous_response_tokens(agent_data, current_turn_start)
                             return  AgentState.TERMINATED
                         for query in query_list:
                             query = normalize_answer(query)
                             if query in agent_data.searched_query:
                                 agent_data.abnormal_trajectory_dic['searched_query_count'] += 1
+                                self._mask_previous_response_tokens(agent_data, current_turn_start)
                                 return AgentState.TERMINATED
                             else:
                                 agent_data.searched_query.add(query)
             except:
                 agent_data.abnormal_trajectory_dic['tool_parser_error_count'] += 1
+                self._mask_previous_response_tokens(agent_data, current_turn_start)
                 return AgentState.TERMINATED
             return AgentState.PROCESSING_TOOLS
         else:

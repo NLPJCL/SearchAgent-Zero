@@ -930,8 +930,33 @@ def compute_offpolicy_metrics(
         Dictionary of off-policy metrics (without prefix)
     """
     # Validate that we have at least one valid token
-    assert response_mask.any(), "Expected at least one valid token in response_mask"
+    # assert response_mask.any(), "Expected at least one valid token in response_mask"
 
+    if not response_mask.any():
+        # Default values are chosen to be neutral:
+        # - Perplexity = 1.0 (perfect certainty on an empty sequence)
+        # - Log Perplexity = 0.0
+        # - Divergences (KL, Chi-squared) = 0.0 (no observed difference)
+        # - Ratios = 1.0
+        metrics = {
+            "training_ppl": 1.0,
+            "training_log_ppl": 0.0,
+        }
+        if rollout_log_prob is not None:
+            metrics.update({
+                "kl": 0.0,
+                "k3_kl": 0.0,
+                "rollout_ppl": 1.0,
+                "rollout_log_ppl": 0.0,
+                "log_ppl_diff": 0.0,
+                "log_ppl_abs_diff": 0.0,
+                "log_ppl_diff_max": 0.0,
+                "log_ppl_diff_min": 0.0,
+                "ppl_ratio": 1.0,
+                "chi2_token": 0.0,
+                "chi2_seq": 0.0,
+            })
+        return metrics
     metrics = {}
 
     # 1. Training policy perplexity (always available)

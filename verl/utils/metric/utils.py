@@ -47,14 +47,18 @@ def reduce_metrics(metrics: dict[str, Union["Metric", list[Any]]]) -> dict[str, 
         {"loss": 2.0, "accuracy": 0.8, "max_reward": 8.0, "min_error": 0.05}
     """
     for key, val in metrics.items():
-        if isinstance(val, Metric):
-            metrics[key] = val.aggregate()
-        elif "max" in key:
-            metrics[key] = np.max(val)
-        elif "min" in key:
-            metrics[key] = np.min(val)
-        else:
-            metrics[key] = np.mean(val)
+        try:
+            if isinstance(val, Metric):
+                metrics[key] = val.aggregate()
+            elif "max" in key:
+                metrics[key] = np.max(val)
+            elif "min" in key:
+                metrics[key] = np.min(val)
+            else:
+                metrics[key] = np.mean(val)
+        except ValueError as e:
+            print(f"!!! Error on key '{key}' with value {val}")
+            raise e # 重新抛出异常，以免影响原有逻辑
     return metrics
 
 

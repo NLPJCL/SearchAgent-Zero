@@ -25,6 +25,7 @@ from verl.trainer.ppo.metric_utils import (
     bootstrap_metric,
     calc_maj_val,
     compute_data_metrics,
+    compute_pass_at_k_metrics,
     compute_throughout_metrics,
     compute_timing_metrics,
     process_validation_metrics,
@@ -497,6 +498,40 @@ class TestCalcMajVal(unittest.TestCase):
         result = calc_maj_val(data, vote_key="pred", val_key="val")
 
         self.assertTrue(result in [0.9, 0.8])
+
+
+class TestComputePassAtKMetrics(unittest.TestCase):
+    """Tests for any-of-k pass metrics."""
+
+    def test_compute_train_pass_at_k_metrics(self):
+        sample_uids = ["prompt1"] * 5 + ["prompt2"] * 5
+        acc_values = [0, 0, 1, 0, 0, 0, 0, 0, 0, 0]
+
+        result = compute_pass_at_k_metrics(sample_uids, acc_values, k=5, prefix="train")
+
+        self.assertEqual(result["train/pass@1"], 0.0)
+        self.assertEqual(result["train/pass@5"], 0.5)
+
+    def test_compute_pass_at_k_metrics_by_data_source(self):
+        sample_uids = ["prompt1"] * 3 + ["prompt2"] * 3 + ["prompt3"] * 3
+        acc_values = [0, 1, 0, 0, 0, 0, 1, 0, 0]
+        data_sources = ["source1"] * 6 + ["source2"] * 3
+
+        result = compute_pass_at_k_metrics(sample_uids, acc_values, k=3, prefix="test", data_sources=data_sources)
+
+        self.assertEqual(result["test/source1/pass@1"], 0.0)
+        self.assertEqual(result["test/source1/pass@3"], 0.5)
+        self.assertEqual(result["test/source2/pass@1"], 1.0)
+        self.assertEqual(result["test/source2/pass@3"], 1.0)
+
+    def test_compute_pass_at_k_metrics_skips_missing_acc(self):
+        sample_uids = ["prompt1", "prompt1", "prompt2"]
+        acc_values = [None, float("nan"), 1]
+
+        result = compute_pass_at_k_metrics(sample_uids, acc_values, k=2, prefix="train")
+
+        self.assertEqual(result["train/pass@1"], 1.0)
+        self.assertEqual(result["train/pass@2"], 1.0)
 
 
 class TestProcessValidationMetrics(unittest.TestCase):

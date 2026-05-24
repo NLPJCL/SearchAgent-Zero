@@ -98,10 +98,10 @@ def default_compute_score(
         "searchR1_2wikimultihopqa",
         "searchR1_musique",
         "searchR1_bamboogle",
-    ]:
+        "searchR1_asearcher"]:
         from . import search_r1_like_qa_em
 
-        res = search_r1_like_qa_em.compute_score(solution_str, ground_truth)
+        res = search_r1_like_qa_em.compute_score(solution_str, ground_truth,extra_info)
 
     else:
         raise NotImplementedError(f"Reward function is not implemented for {data_source=}")

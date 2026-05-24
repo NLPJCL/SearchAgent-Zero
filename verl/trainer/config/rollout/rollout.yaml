@@ -2,7 +2,7 @@
 _target_: verl.workers.config.RolloutConfig
 
 # actor_rollout_ref.rollout.name: hf/vllm/sglang/trtllm. The default value will be removed in the future
-name: ???
+name: sglang
 
 # sync: LLM, async: AsyncLLM
 mode: async
@@ -167,8 +167,8 @@ multi_turn:
   # Required when using verl.utils.omega_conf_to_dataclass to instantiate dataclass configs
   _target_: verl.workers.config.MultiTurnConfig
 
-  # set to True for multi-turn tool tasks; should set rollout.name to sglang as well
-  enable: False
+  # set to True for multi-turn tool interaction tasks; should set rollout.name to sglang as well
+  enable: True
 
   # null for no limit (default max_length // 3)
   max_assistant_turns: null

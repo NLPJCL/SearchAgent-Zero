@@ -251,19 +251,51 @@ def compute_data_metrics(batch: DataProto, use_critic: bool = True) -> dict[str,
         "prompt_length/min": torch.min(prompt_length).detach().item(),
         "prompt_length/clip_ratio": torch.mean(torch.eq(prompt_length, max_prompt_length).float()).detach().item(),
     }
-
-    # multi-turn conversation
-    if "__num_turns__" in batch.non_tensor_batch:
-        num_turns = batch.non_tensor_batch["__num_turns__"]
-        metrics["num_turns/min"] = num_turns.min()
-        metrics["num_turns/max"] = num_turns.max()
-        metrics["num_turns/mean"] = num_turns.mean()
-
     if "tool_call_counts" in batch.non_tensor_batch:
         tool_call_counts = batch.non_tensor_batch["tool_call_counts"]
-        metrics["tool_call_counts/min"] = tool_call_counts.min()
-        metrics["tool_call_counts/max"] = tool_call_counts.max()
-        metrics["tool_call_counts/mean"] = tool_call_counts.mean()
+        metrics["turn/tool_call_turn/min"] = tool_call_counts.min()
+        metrics["turn/tool_call_turn/max"] = tool_call_counts.max()
+        metrics["turn/tool_call_turn/mean"] = tool_call_counts.mean()
+
+    if "all_call_tool_counts" in batch.non_tensor_batch and "all_call_tool_success_counts" in batch.non_tensor_batch:
+        all_call_tool_counts = batch.non_tensor_batch["all_call_tool_counts"]
+        tool_tool_success = batch.non_tensor_batch["all_call_tool_success_counts"]
+
+        metrics["turn/all_call_tool_counts/min"] = all_call_tool_counts.min()
+        metrics["turn/all_call_tool_counts/max"] = all_call_tool_counts.max()
+        metrics["turn/all_call_tool_counts/mean"] = all_call_tool_counts.mean()
+
+        metrics["turn/tool_call_success_counts/min"] = tool_tool_success.min()
+        metrics["turn/tool_call_success_counts/max"] = tool_tool_success.max()
+        metrics["turn/tool_call_success_counts/mean"] = tool_tool_success.mean()
+
+        all_call_tool_counts_sum = all_call_tool_counts.sum()
+        tool_tool_success_sum = tool_tool_success.sum()
+        if all_call_tool_counts_sum > 0:
+            metrics["turn/tool_call_success_rate/mean"] = tool_tool_success_sum / all_call_tool_counts_sum
+        else:
+            metrics["turn/tool_call_success_rate/mean"] = 1
+    if "searched_query_count" in batch.non_tensor_batch:
+        searched_query_count = batch.non_tensor_batch["searched_query_count"]
+        metrics["abnormal_trajectory/searched_query_count_percentage"] = searched_query_count.sum() / len(searched_query_count)
+
+    if "too_many_tool_call_count" in batch.non_tensor_batch:
+        too_many_tool_call_count = batch.non_tensor_batch["too_many_tool_call_count"]
+        metrics["abnormal_trajectory/too_many_tool_call_count_percentage"] = too_many_tool_call_count.sum() / len(too_many_tool_call_count)
+
+    if "tool_parser_error_count" in batch.non_tensor_batch:
+        tool_parser_error_count = batch.non_tensor_batch["tool_parser_error_count"]
+        metrics["abnormal_trajectory/tool_parser_error_count_percentage"] = tool_parser_error_count.sum() / len(tool_parser_error_count)
+
+    if "response_truncated_count" in batch.non_tensor_batch:
+        response_truncated_count = batch.non_tensor_batch["response_truncated_count"]
+        metrics["abnormal_trajectory/response_truncated_count_percentage"] = response_truncated_count.sum() / len(response_truncated_count)
+    if "too_many_turn_count" in batch.non_tensor_batch:
+        too_many_turn_count = batch.non_tensor_batch["too_many_turn_count"]
+        metrics["abnormal_trajectory/too_many_turn_count_percentage"] = too_many_turn_count.sum() / len(too_many_turn_count)
+    if "too_long_seq_truncated_count" in batch.non_tensor_batch:
+        too_long_seq_truncated_count = batch.non_tensor_batch["too_long_seq_truncated_count"]
+        metrics["abnormal_trajectory/too_long_seq_truncated_count_percentage"] = too_long_seq_truncated_count.sum() / len(too_long_seq_truncated_count)
 
     return metrics
 

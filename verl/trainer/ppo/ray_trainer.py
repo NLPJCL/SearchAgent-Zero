@@ -415,12 +415,21 @@ class RayPPOTrainer:
         }
 
         for k, v in reward_extra_infos_dict.items():
+
             if len(v) == n:
                 base_data[k] = v
 
         lines = []
         for i in range(n):
-            entry = {k: v[i] for k, v in base_data.items()}
+            entry = {}
+            for k, v in base_data.items():
+                value = v[i]
+                if isinstance(value, np.integer):
+                    entry[k] = int(value)
+                elif isinstance(value, np.floating):
+                    entry[k] = float(value)
+                else:
+                    entry[k] = value
             lines.append(json.dumps(entry, ensure_ascii=False, default=str))
 
         with open(filename, "w") as f:
@@ -519,8 +528,8 @@ class RayPPOTrainer:
         sample_scores = []
         sample_turns = []
         sample_uids = []
-
-        for test_data in self.val_dataloader:
+        import tqdm
+        for test_data in tqdm.tqdm(self.val_dataloader):
             test_batch = DataProto.from_single_dict(test_data)
 
             if "uid" not in test_batch.non_tensor_batch:
@@ -1626,6 +1635,26 @@ class RayPPOTrainer:
                 # compute variance proxy metrics
                 gradient_norm = metrics.get("actor/grad_norm", None)
                 metrics.update(compute_variance_proxy_metrics(batch=batch, gradient_norm=gradient_norm))
+                # Log extra reward scores separately for visibility in training metrics.
+                if reward_extra_infos_dict:
+                    for key, values in reward_extra_infos_dict.items():
+                        arr = np.array(values, dtype=np.float32)
+                        if arr.size == 0:
+                            continue
+                        # if key.startswith("first_") :
+                        #     all_count = float(np.sum(arr))
+                        #     metrics[f"reward_extra/{key}/prob"] = all_count / len(values)
+                        #     continue
+                        # metrics[f"reward_extra/{key}/mean"] = float(arr.mean())
+                        # metrics[f"reward_extra/{key}/min"] = float(arr.min())
+                        # metrics[f"reward_extra/{key}/max"] = float(arr.max())
+
+                        if key.startswith("first_"):
+                            metrics[f"reward_extra/{key}/prob"] = float(arr.mean())
+                        else:
+                            metrics[f"reward_extra/{key}/mean"] = float(arr.mean())
+                            metrics[f"reward_extra/{key}/min"] = float(arr.min())
+                            metrics[f"reward_extra/{key}/max"] = float(arr.max())
                 # Note: mismatch metrics (KL, PPL, etc.) are collected at line 1179 after advantage computation
 
                 # this is experimental and may be changed/removed in the future in favor of a general-purpose one

@@ -204,10 +204,15 @@ class AgentLoopOutput(BaseModel):
     """Reward score for the trajectory."""
     num_turns: int = 0
     """Number of chat turns, including user, assistant, tool."""
+    tool_turns: int = 0
+    """Number of chat turns tool."""
     metrics: AgentLoopMetrics
     """Auxiliary performance metrics"""
     extra_fields: dict[str, Any] = {}
     """Extra fields for dynamic addition."""
+    all_call_tool_counts : int = 0
+    all_call_tool_success_counts : int = 0
+    abnormal_trajectory_dic : dict[str, int] = {}
 
     def as_dict(self) -> dict[str, Any]:
         """Convert agent loop output to a dictionary."""
@@ -787,6 +792,10 @@ class AgentLoopWorker:
             teacher_ids=teacher_ids,
             reward_score=output.reward_score,
             num_turns=output.num_turns,
+            tool_turns=output.tool_turns,
+            all_call_tool_counts=output.all_call_tool_counts,
+            all_call_tool_success_counts=output.all_call_tool_success_counts,
+            abnormal_trajectory_dic=output.abnormal_trajectory_dic,
             metrics=output.metrics,
             extra_fields=output.extra_fields,
         )
@@ -877,6 +886,9 @@ class AgentLoopWorker:
                 non_tensor_batch = {
                     **{k: np.array([v]) for k, v in kwargs.items()},
                     "__num_turns__": np.array([output.num_turns]),
+                    "tool_call_counts": np.array([output.tool_turns]),
+                    "all_call_tool_counts": np.array([output.all_call_tool_counts]),
+                    "all_call_tool_success_counts": np.array([output.all_call_tool_success_counts]),
                     "tool_extra_fields": np.array([output.extra_fields], dtype=object),
                 }
 
@@ -960,9 +972,19 @@ class AgentLoopWorker:
 
         non_tensor_batch = {
             "__num_turns__": np.array([input.num_turns for input in inputs], dtype=np.int32),
+            "tool_call_counts": np.array([input.tool_turns for input in inputs], dtype=np.int32),
+            "all_call_tool_counts": np.array([input.all_call_tool_counts for input in inputs], dtype=np.int32),
+            "all_call_tool_success_counts": np.array([input.all_call_tool_success_counts for input in inputs], dtype=np.int32)
         }
         if self.reward_loop_worker_handles is None and input_non_tensor_batch:
             non_tensor_batch.update(input_non_tensor_batch)
+
+        # add abnormal_trajectory_dic to non_tensor_batch
+        abnormal_trajectory_dics = [input.abnormal_trajectory_dic for input in inputs]
+        if abnormal_trajectory_dics and abnormal_trajectory_dics[0]:
+            abnormal_trajectory_keys = list(abnormal_trajectory_dics[0].keys())
+            for key in abnormal_trajectory_keys:
+                non_tensor_batch[key] = np.array([dic[key] for dic in abnormal_trajectory_dics], dtype=np.int32)
 
         # add reward_extra_info to non_tensor_batch
         reward_extra_infos = [input.extra_fields.get("reward_extra_info", {}) for input in inputs]
