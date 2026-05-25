@@ -46,7 +46,7 @@ In the longer-horizon BrowseComp-Plus search setting, Qwen3-8B learns a more pro
 
 | Setting | Accuracy | Recall | Average Search Count |
 | --- | ---: | ---: | ---: |
-| Qwen3-32B base | 10.72% | 7.28% | 0.94 |
+| Qwen3-32B  | 10.72% | 7.28% | 0.94 |
 | Qwen3-8B + abnormal trajectory filtering + self-summary (100 step) | 24.21% | 33.14% | 10.11 |
 | Qwen3-8B + credit-assignment abnormal trajectory filtering + self-summary (100 step) | 28.19% | 40.10% | 14.22 |
 | SearchAgent-Zero (300 step) | 37.95% | 50.87% | 38.47 |
