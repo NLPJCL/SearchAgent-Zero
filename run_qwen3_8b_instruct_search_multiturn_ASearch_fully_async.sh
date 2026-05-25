@@ -49,7 +49,7 @@ ulimit -n 65535
 ASEARCH_DATA_DIR="${ASEARCH_DATA_DIR:-${REPO_ROOT}/examples/search_agent_rl/ASearcher}"
 TRAIN_DATA="${TRAIN_DATA:-${ASEARCH_DATA_DIR}/ASearcher_train.parquet}"
 VAL_DATA="${VAL_DATA:-${ASEARCH_DATA_DIR}/ASearcher_test.parquet}"
-MODEL_PATH="${MODEL_PATH:-/mnt/bn/ttsa-relevance-2/jcli/models/Qwen3-8B}"
+MODEL_PATH="${MODEL_PATH:-Qwen/Qwen3-8B}"
 
 NNODES="${NNODES:-1}"
 NGPUS_PER_NODE="${NGPUS_PER_NODE:-8}"
