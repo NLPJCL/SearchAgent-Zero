@@ -86,6 +86,23 @@ class MultiTurnConfig(BaseConfig):
     format: str = "hermes"
     num_repeat_rollouts: Optional[int] = None
 
+    # SearchAgent-Zero multi-turn search agent options
+    turn_limit_schedule: Optional[str] = None
+    enable_tool_response_summary: bool = False
+    summary_temperature: float = 0.6
+    summary_top_p: float = 0.95
+    summary_top_k: int = 20
+    summary_max_tokens: int = 1024
+    summary_use_external_model: bool = False
+    summary_external_base_urls: str = ""
+    summary_external_model: str = ""
+    summary_external_api_key: str = ""
+    summary_external_timeout: float = 60.0
+    summary_external_enable_thinking: bool = False
+    max_queries_per_tool_call: Optional[int] = None
+    duplicate_search_result_overlap_threshold: float = 2 / 3
+    summary_result_separator: str = "\\n"
+
 
 @dataclass
 class CustomAsyncServerConfig(BaseConfig):
