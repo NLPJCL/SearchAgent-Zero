@@ -209,6 +209,29 @@ multi_turn:
   # Number of repeat rollouts for each sample
   num_repeat_rollouts: null
 
+  # SearchAgent-Zero: schedule max search turns, e.g. "0:4,50:8"
+  turn_limit_schedule: null
+
+  # SearchAgent-Zero: compress long search results before feeding back to the model
+  enable_tool_response_summary: False
+  summary_result_separator: "\\n"
+  summary_temperature: 0.6
+  summary_top_p: 0.95
+  summary_top_k: 20
+  summary_max_tokens: 1024
+  summary_use_external_model: False
+  summary_external_base_urls: ""
+  summary_external_model: ""
+  summary_external_api_key: ""
+  summary_external_timeout: 60.0
+  summary_external_enable_thinking: False
+
+  # SearchAgent-Zero: max queries inside one search tool call
+  max_queries_per_tool_call: null
+
+  # SearchAgent-Zero: duplicate search result detection threshold
+  duplicate_search_result_overlap_threshold: 0.6666666666666666
+
 # support logging rollout prob for debugging purpose
 # "Truncated importance sampling" requires rollout log probs, set to True when turning on Truncated importance sampling
 calculate_log_probs: False
