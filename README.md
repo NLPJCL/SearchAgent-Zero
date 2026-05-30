@@ -6,6 +6,11 @@ SearchAgent-Zero is a verl-based reinforcement learning framework for training s
 
 It provides a reproducible training recipe with multi-turn tool calling, retrieval services, abnormal trajectory handling, summary compression, and synchronous/asynchronous RL training. The goal is to make Search Agent RL easier to reproduce, scale, and extend.
 
+##  Communication between communities
+
+[WeChat Discussion Group](https://github.com/NLPJCL/SearchAgent-Zero/blob/main/docs/_static/5a8096ce6f298d2726ed225d7f233fc7.jpg)
+
+
 ## News
 
 - **[2026/05/24] We SearchAgent-Zero releases [SearchAgent-Zero: A Scalable Multi-Turn Search Agent RL Framework](https://zhuanlan.zhihu.com/p/2042036895199278392) .** The Search-R1 recipe improves the average score on the full Search-R1 evaluation suite from `0.325` to `0.407` with Qwen2.5-3B-Instruct. The ASearch recipe scales to long-horizon search: SearchAgent-Zero (Qwen3-8B, 300 steps) reaches `37.95%` Accuracy and `50.87%` Recall on BrowseComp-Plus, achieving SOTA among models below 14B parameters. See `examples/search_agent_rl/`, `verl/experimental/agent_loop/`, and `verl/tools/search_tool.py` for implementation details.
@@ -16,6 +21,7 @@ It provides a reproducible training recipe with multi-turn tool calling, retriev
 - **Abnormal trajectory filtering and credit assignment**: Filters or penalizes low-quality trajectories such as repeated searches, too many parallel queries in one turn, and malformed tool calls. When an abnormal event occurs in only one tool-call turn, only the tokens related to that turn are penalized, reducing unintended punishment of earlier valid search behavior.
 - **Search result summary compression**: Supports self-summary and external-summary to preserve key information across more search turns within a limited context budget.
 - **Synchronous and fully async training**: Provides a standard GRPO training script and a fully async policy training entrypoint for exploring higher-throughput long-horizon Search Agent RL.
+
 
 ## Results
 
