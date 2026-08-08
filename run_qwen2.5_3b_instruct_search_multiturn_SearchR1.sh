@@ -5,7 +5,6 @@ SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
 REPO_ROOT="$SCRIPT_DIR"
 CONFIG_PATH="${CONFIG_PATH:-${REPO_ROOT}/examples/search_agent_rl/config}"
 TOOL_CONFIG="${TOOL_CONFIG:-${CONFIG_PATH}/tool_config/search_tool_config.yaml}"
-AGENT_LOOP_CONFIG="${AGENT_LOOP_CONFIG:-${CONFIG_PATH}/agent_loop/tool_agent_credit_assignment.yaml}"
 
 CACHE_BASE="${CACHE_BASE:-/tmp/temp_cache}"
 
