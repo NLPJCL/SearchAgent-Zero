@@ -1,0 +1,11 @@
+cff-version: 1.2.0
+type: software
+message: "If you use this software, please cite it using the metadata below."
+title: "SearchAgent-Zero: Scalable Reinforcement Learning for Multi-Turn Search Agents"
+authors:
+  - family-names: "Li"
+    given-names: "Jiacheng"
+date-released: 2026-05-24
+repository-code: "https://github.com/NLPJCL/SearchAgent-Zero"
+url: "https://github.com/NLPJCL/SearchAgent-Zero"
+license: Apache-2.0

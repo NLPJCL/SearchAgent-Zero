@@ -295,6 +295,8 @@ verl/tools/search_tool.py
 
 If SearchAgent-Zero helps your research or engineering work, please consider citing it:
 
+Machine-readable citation metadata is available in [CITATION.cff](CITATION.cff).
+
 ```bibtex
 @software{li2026searchagentzero,
   title  = {SearchAgent-Zero: Scalable Reinforcement Learning for Multi-Turn Search Agents},

@@ -288,11 +288,13 @@ verl/tools/search_tool.py
 
 如果你觉得 SearchAgent-Zero 对你的研究或工程有帮助，欢迎引用：
 
+机器可读的引用元数据见 [CITATION.cff](CITATION.cff)。
+
 ```bibtex
 @software{li2026searchagentzero,
   title  = {SearchAgent-Zero: Scalable Reinforcement Learning for Multi-Turn Search Agents},
   author = {Li, Jiacheng},
-  url    = {https://github.com/verl-project/verl},
+  url    = {https://github.com/NLPJCL/SearchAgent-Zero},
   year   = {2026}
 }
 ```
